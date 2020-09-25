@@ -8,7 +8,7 @@ public class MyTools {
         JackHammer rentedItem = new JackHammer("JAKR");
         LocalDate testDate = LocalDate.of(2020, 7, 2);
         int rentalDays = 4;
-        int discountPercentInt = 50;
+        int discountPercentInt = 101;
 
         Agreement userAgreement = new Agreement(rentedItem, rentalDays, testDate, discountPercentInt);
 

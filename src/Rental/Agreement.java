@@ -61,6 +61,7 @@ public class Agreement {
                      int discountPercent) {
 
         try {
+
             if (rentalDays < 1) {                                                                  // If rentalDays is Less Than 1...
                 throw new RentalDayOutOfBoundsException("Rental days must be at 1 or greater");    // Throw RentalDayOutOfBoundsException
             }
@@ -68,31 +69,32 @@ public class Agreement {
                 throw new PercentageOutOfBoundsException("Discount percent must be between 0 - 100");
                                                                                                    // Throw PercentageOutOfBoundsException
             }
+
+            this.toolCode = toolInstance.code;                                                     // Assign the Tool Code to This Agreement
+            this.toolType = toolInstance.type;                                                     // Assign the Tool Type to This Agreement
+            this.toolBrand = toolInstance.brand;                                                   // Assign the Tool Brand to This Agreement
+            this.dailyCharge = toolInstance.dailyCharge;                                           // Assign the Daily Charge to This Agreement
+            this.weekendCharge = toolInstance.weekendCharge;                                       // Assign If the Tool has Weekend Charges to This Agreement
+            this.holidayCharge = toolInstance.holidayCharge;                                       // Assign if the Tool has Holiday Charges to This Agreement
+
+            this.rentalDays = rentalDays;                                                          // Assign the Rental Days to This Agreement
+            this.checkoutDate = checkoutDate;                                                      // Assign the Checkout Date to This Agreement
+            this.discountPercentAsInt = discountPercent;                                           // Assign the Discount Percent As an Integer to This Agreement
+
+            this.dueDate = checkoutDate.plusDays(rentalDays);                                      // Calculate the Due Date for this Agreement
+            this.chargeDays = calculateChargeDays();                                               // Calculate the Number of Days The User Will be Charged for
+            this.discountPercentAsDouble = this.discountPercentAsInt / 100.00;                     // Calculate the Discount Percent as a Double
+            this.subTotalAsDouble = ((double) this.chargeDays) * (this.dailyCharge);               // Calculate the Sub Total
+            this.discountedAmountAsDouble = this.subTotalAsDouble * this.discountPercentAsDouble;  // Calculate the Discounted Amount as a Double
+            this.totalAsDouble = this.subTotalAsDouble - this.discountedAmountAsDouble;            // Calculate the Total as a Double
+            this.totalAsDouble = ((this.totalAsDouble == this.discountedAmountAsDouble) ?          // Edge Case for .X9 Values due to Rounding...
+                    (this.totalAsDouble - 0.01) : this.totalAsDouble);
+
         } catch (RentalDayOutOfBoundsException error) {                                            // Catch RentalDayOutOfBoundsException
             error.printStackTrace();                                                               // Print the Stack Trace
         } catch (PercentageOutOfBoundsException error) {                                           // Catch RentalDayOutOfBoundsException
             error.printStackTrace();                                                               // Print the Stack Trace
         }
-
-        this.toolCode = toolInstance.code;                                                         // Assign the Tool Code to This Agreement
-        this.toolType = toolInstance.type;                                                         // Assign the Tool Type to This Agreement
-        this.toolBrand = toolInstance.brand;                                                       // Assign the Tool Brand to This Agreement
-        this.dailyCharge = toolInstance.dailyCharge;                                               // Assign the Daily Charge to This Agreement
-        this.weekendCharge = toolInstance.weekendCharge;                                           // Assign If the Tool has Weekend Charges to This Agreement
-        this.holidayCharge = toolInstance.holidayCharge;                                           // Assign if the Tool has Holiday Charges to This Agreement
-
-        this.rentalDays = rentalDays;                                                              // Assign the Rental Days to This Agreement
-        this.checkoutDate = checkoutDate;                                                          // Assign the Checkout Date to This Agreement
-        this.discountPercentAsInt = discountPercent;                                               // Assign the Discount Percent As an Integer to This Agreement
-
-        this.dueDate = checkoutDate.plusDays(rentalDays);                                          // Calculate the Due Date for this Agreement
-        this.chargeDays = calculateChargeDays();                                                   // Calculate the Number of Days The User Will be Charged for
-        this.discountPercentAsDouble = this.discountPercentAsInt / 100.00;                         // Calculate the Discount Percent as a Double
-        this.subTotalAsDouble = ((double) this.chargeDays) * (this.dailyCharge);                   // Calculate the Sub Total
-        this.discountedAmountAsDouble = this.subTotalAsDouble * this.discountPercentAsDouble;      // Calculate the Discounted Amount as a Double
-        this.totalAsDouble = this.subTotalAsDouble - this.discountedAmountAsDouble;                // Calculate the Total as a Double
-        this.totalAsDouble = ((this.totalAsDouble == this.discountedAmountAsDouble) ?              // Edge Case for .X9 Values due to Rounding...
-                                (this.totalAsDouble - 0.01) : this.totalAsDouble);
 
     }
 
